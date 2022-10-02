@@ -1,6 +1,8 @@
 package com.example.springtest2.model;
 
 import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table (name = "orders")
@@ -13,15 +15,24 @@ public class Order {
     @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn (name = "customer_id")
     private Customer customer;
-    @ManyToOne (fetch = FetchType.EAGER)
-    @JoinColumn (name = "product_id")
-    private Product product;
+
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "order_")
+    private List<Product> products = new LinkedList<>();
 
     public Order (){ }
 
-    public Order (Customer customer, Product product){
+    public Order (Customer customer, List<Product> products){
         this.customer = customer;
-        this.product = product;
+        this.products = products;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     public long getId() {
@@ -38,13 +49,5 @@ public class Order {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 }

@@ -1,13 +1,15 @@
 package com.example.springtest2.dto;
 
+import java.util.List;
+
 public class OrderDTO {
 
     private Long customerId;
-    private Long productId;
+    private List<Long> productIds;
 
-    public OrderDTO(Long customerId, Long productId) {
+    public OrderDTO(Long customerId, List<Long> productIds) {
         this.customerId = customerId;
-        this.productId = productId;
+        this.productIds = productIds;
     }
 
     public Long getCustomerId() {
@@ -18,12 +20,12 @@ public class OrderDTO {
         this.customerId = customerId;
     }
 
-    public Long getProductId() {
-        return productId;
+    public List<Long> getProductIds() {
+        return productIds;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProductIds(List<Long> productIds) {
+        this.productIds = productIds;
     }
 
 }
