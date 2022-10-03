@@ -7,7 +7,6 @@ import com.example.springtest2.model.Product;
 import com.example.springtest2.repository.CustomerRepository;
 import com.example.springtest2.repository.OrderRepository;
 import com.example.springtest2.repository.ProductRepository;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,22 +62,34 @@ public class OrderRestController {
     }
 
     @PutMapping("{id}")
-    public Order updateOrder (@PathVariable ("id") Long id,
+    public ResponseEntity<Order> update (@PathVariable ("id") Long id,
                               @RequestBody OrderDTO orderDTO){
-        //необходимо обновлять существующий в базе ордер и проверять что он существует
+        //необходимо обновлять существующий в базе ордер
         Long customerId = orderDTO.getCustomerId();
         List<Long> productId = orderDTO.getProductIds();
         Customer customer = customerRepository.findById(customerId).orElse(null);
         List<Product> products = productRepository.findAllById(productId);
+        if (customer == null){
+            return ResponseEntity.badRequest().build();
+        }
+        if (products.size() == 0){
+            return ResponseEntity.badRequest().build();
+        }
         Order order = new Order();
         order.setId(id);
         order.setCustomer(customer);
         order.setProducts(products);
-        return orderRepository.save(order);
+        Order updateOrder = orderRepository.save(order);
+        return new ResponseEntity<>(updateOrder, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public void deleteOrder(@PathVariable ("id") Long id){
+    public ResponseEntity<Order> deleteOrder(@PathVariable ("id") Long id){
+        Order order = orderRepository.findById(id).orElse(null);
+        if (order == null){
+            return ResponseEntity.badRequest().build();
+        }
         orderRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

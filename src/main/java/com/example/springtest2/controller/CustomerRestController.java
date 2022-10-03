@@ -5,6 +5,7 @@ import com.example.springtest2.model.Order;
 import com.example.springtest2.repository.CustomerRepository;
 import com.example.springtest2.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +29,24 @@ public class CustomerRestController {
     }
 
     @GetMapping("{id}")
-    public Customer getOne(@PathVariable("id") Customer customer) {
-        return customer;
+    public ResponseEntity<Customer> getOne(@PathVariable("id") Long customerId) {
+        Customer customer = customerRepository.findById(customerId).orElse(null);
+        if(customer == null){
+            return ResponseEntity.badRequest().build();
+        }
+        return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
     @PostMapping
-    public Customer create(@RequestBody Customer customer) {
-        return customerRepository.save(customer);
+    public ResponseEntity<Customer> create(@RequestBody Customer customer) {
+        if (customer.getNameCustomer() == null){
+            return ResponseEntity.badRequest().build();
+        }
+        if (customer.getAge() < 0){
+            return ResponseEntity.badRequest().build();
+        }
+        Customer newCustomer = customerRepository.save(customer);
+        return new ResponseEntity<>(newCustomer, HttpStatus.OK);
     }
 
     @PutMapping("{id}")

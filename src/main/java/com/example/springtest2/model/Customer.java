@@ -1,7 +1,6 @@
 package com.example.springtest2.model;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "customer")
