@@ -10,7 +10,7 @@ public class Order {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn (name = "customer_id")

@@ -58,16 +58,16 @@ public class ProductRestController {
     }
 
     @DeleteMapping ("{id}")
-    public ResponseEntity<Product> delete (@PathVariable ("id") Long id){
+    public ResponseEntity<String> delete (@PathVariable ("id") Long id){
         Product product = productRepository.findById(id).orElse(null);
         if (product == null){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Продукта с таким id нет");
         }
         List<Order> orders = orderRepository.getOrdersByProductsId(id);
         if(orders.size() > 0){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Этот продукт есть в заказах");
         }
         productRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Продукт удален");
     }
 }

@@ -84,12 +84,12 @@ public class OrderRestController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Order> deleteOrder(@PathVariable ("id") Long id){
+    public ResponseEntity<String> deleteOrder(@PathVariable ("id") Long id){
         Order order = orderRepository.findById(id).orElse(null);
         if (order == null){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Заказа с таким id нет");
         }
         orderRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Заказ удален");
     }
 }

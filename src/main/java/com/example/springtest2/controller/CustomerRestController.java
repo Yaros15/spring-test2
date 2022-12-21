@@ -33,6 +33,7 @@ public class CustomerRestController {
         Customer customer = customerRepository.findById(customerId).orElse(null);
         if(customer == null){
             return ResponseEntity.badRequest().build();
+
         }
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
@@ -57,17 +58,16 @@ public class CustomerRestController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Customer> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
         Customer customer = customerRepository.findById(id).orElse(null);
-        //научиться пояснять в ответе причину по которой запрос плохой
         if (customer == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Клиента с таким id нет");
         }
         List<Order> orders = orderRepository.getOrdersByCustomerId(id);
         if (orders.size() > 0) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("У этого клиента есть заказы");
         }
         customerRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Клиент удален");
     }
 }
