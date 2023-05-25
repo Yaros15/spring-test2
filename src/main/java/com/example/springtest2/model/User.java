@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "usr")
-public class User implements UserDetails {
+public class User implements UserDetails { // интерфейс сведений о пользователе ядря безопасности
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,8 +44,8 @@ public class User implements UserDetails {
 
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+    public Collection<? extends GrantedAuthority> getAuthorities() { // наюор предоставленных полномочий
+        return List.of(new SimpleGrantedAuthority(role.name())); // возвращает список ролей
     }
 
     @Override
@@ -61,20 +61,20 @@ public class User implements UserDetails {
     @Override
     public boolean isAccountNonExpired() {
         return true;
-    }
+    } // срок действия ааккаунта не истек
 
     @Override
     public boolean isAccountNonLocked() {
         return true;
-    }
+    } // не заблакирован
 
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
-    }
+    } // не зарегестрирован по истечению срока действия
 
     @Override
     public boolean isEnabled() {
         return true;
-    }
+    } //включен
 }
