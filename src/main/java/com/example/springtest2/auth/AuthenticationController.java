@@ -12,16 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationService service;
+    private final AuthenticationService service; // созданый класс службы аутентификации
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationRespons> register (@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(service.register(request));
+    public ResponseEntity<AuthenticationRespons> register ( // метод возвращает ответ аутентификации
+            @RequestBody RegisterRequest request) { // в аргументе получаем регистрационную информацию
+        return ResponseEntity.ok(service.register(request)); // вызываем у службы аутентификации метод регистрации
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationRespons> authenticate (@RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(service.authenticate(request));
+    public ResponseEntity<AuthenticationRespons> authenticate ( // метод возвращает ответ аутентификации
+            @RequestBody AuthenticationRequest request) { // в аргументе получаем информацию аутентификации
+        return ResponseEntity.ok(service.authenticate(request)); // вызываем у службы аутентификации метод аутентификации
     }
 
 }

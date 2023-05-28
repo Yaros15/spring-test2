@@ -21,26 +21,26 @@ public class ApplicationConfig {
     private final UserRepository userRepository;
 
     @Bean
-    public UserDetailsService userDetailsService(){
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public UserDetailsService userDetailsService(){ // создаем метод, который возвращает сведения о пользователи
+        return username -> userRepository.findByEmail(username) // через лямбду, переопределяем к методу интерфейса: loadUserByUsername
+                .orElseThrow(() -> new UsernameNotFoundException("User not found")); // если логина нет, тогда выпрасываем через лямбду, оюъект ошибки
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
+    public AuthenticationProvider authenticationProvider(){ // поставщик аутентификации
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(); // объект доступа к данным, который отвечает за извлечение данных
+        authProvider.setUserDetailsService(userDetailsService()); // устанавливаем поставщику аутентификации какую службу сведений о пользователе ему использовать
+        authProvider.setPasswordEncoder(passwordEncoder()); //устанавливаем поставщику аутентификации какой кодировщик паролей ему использовать
         return authProvider;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager (AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
+    public AuthenticationManager authenticationManager (AuthenticationConfiguration config) throws Exception { // менеджер аутентификации
+        return config.getAuthenticationManager(); // возвращаем состояние менеджера аутентификации и конфигурации
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() { // кодировщик паролей
         return new BCryptPasswordEncoder();
     }
 

@@ -19,26 +19,26 @@ import javax.servlet.Filter;
 public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final AuthenticationProvider authenticationProvider;
+    private final AuthenticationProvider authenticationProvider; // бин из созданного класса ApplicationConfig
 
     @Bean
-    public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception { //метод с фозвроащаемым значениме цепочка фильтров безопасности
         http
                 .csrf()
-                .disable()
-                .authorizeHttpRequests()
-                //.requestMatchers("api/v1/auth")
+                .disable() // отключаем csrf
+                .authorizeHttpRequests() // после авторизации
+                //.requestMatchers("api/v1/auth") //средства сопастовления запросов (список сторк/шаблонов претставляющий приложения) - открываем доступ к этому адресу
                 .antMatchers("/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .permitAll() // разрешить все запросы для этого списка
+                .anyRequest() // но любой другой запрос
+                .authenticated()// должны быть аутентифицированы
+                .and() // и посмотрим как можем настроить сеанс
+                .sessionManagement() // управление сиансами
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // в политике создания сеансов (делаем сеанс без состояния) - что бы фильтр выполнялся один раз за запрос
+                .and() // и
+                .authenticationProvider(authenticationProvider) // используем поставщика аутентификации(передаем объект провайдера аутентификации)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // метод добавления фильтра перед: jwtAuthFilter,
 
-        return http.build();
+        return http.build(); //вернем сборнку http безопасности
     }
 }

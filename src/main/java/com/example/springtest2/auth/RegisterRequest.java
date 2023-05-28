@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class RegisterRequest { // простой класс для хранения информации необходимой для регистрации
 
     private String firstname;
     private String lastname;

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRespons {
+public class AuthenticationRespons { // простой класс для хранения токена аутентификации
 
     private String token;
 
